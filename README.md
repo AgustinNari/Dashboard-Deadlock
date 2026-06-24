@@ -23,7 +23,7 @@ Para desarrollo, abrir la URL local que muestre Vite con `npm run dev`, normalme
 ## Qué incluye
 
 - Filtros interactivos por versión, región, mapa, rango competitivo (ELO/MMR) y período.
-- KPIs de tasa de victoria (winrate), abandono, tasa de crashes, FPS, satisfacción e intención de retorno.
+- KPIs de tasa de victoria (winrate), abandono por personaje, brecha ganador/perdedor, tasa de crashes, FPS, satisfacción e intención / retención estimada.
 - Badges de alerta: Riesgo de balance, Riesgo técnico, Riesgo de retención y Estable.
 - Cobertura visual del modelo dimensional con facts y dimensiones compartidas.
 - Secciones de balance de personajes, rendimiento en partida, rendimiento técnico y experiencia/retención del jugador.
@@ -46,9 +46,9 @@ La vista predictiva / Data Mining simula cómo el Data Warehouse podría servir 
 2. Mostrar los filtros globales por versión, región, mapa, rango competitivo (ELO/MMR) y período.
 3. Explicar los KPIs principales: tasa de victoria, abandono, crashes, FPS, satisfacción e intención de retorno.
 4. Recorrer Balance de personajes para detectar riesgo de balance o debilidad potencial.
-5. Recorrer Rendimiento en partida para analizar duración, abandono por mapa y eventos por fase.
+5. Recorrer Rendimiento en partida para analizar duración, brecha ganador/perdedor, abandono por mapa y eventos por fase.
 6. Recorrer Rendimiento técnico para priorizar errores, crashes, latencia y FPS.
-7. Recorrer Experiencia y retención del jugador para conectar satisfacción, comentarios e intención de retorno.
+7. Recorrer Experiencia y retención del jugador para conectar satisfacción, comentarios e intención de retorno como aproximación de retención entre sesiones.
 8. Cerrar con la vista predictiva / Data Mining como posible evolución del TPO.
 
 ## Verificación

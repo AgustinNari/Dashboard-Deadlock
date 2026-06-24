@@ -179,9 +179,9 @@ export function App() {
         />
         <KpiCard
           icon="return"
-          label="Intención de retorno"
+          label="Intención / retención estimada"
           value={`${model.kpis.returnIntent}%`}
-          detail="próximo playtest"
+          detail="aproximación entre sesiones"
           signal={riskLabel(retentionLevel, 'Riesgo de retención')}
           level={retentionLevel}
         />
@@ -262,6 +262,11 @@ export function App() {
           <div>
             <span>Fase más activa</span>
             <strong>{[...model.phaseDistribution].sort((a, b) => b.events - a.events)[0]?.phase}</strong>
+          </div>
+          <div>
+            <span>Brecha ganador/perdedor</span>
+            <strong>{model.kpis.winnerLoserGap}%</strong>
+            <small>Índice de contribución en combate</small>
           </div>
         </div>
         <div className="section-grid three">
@@ -379,7 +384,7 @@ export function App() {
       <Panel
         title="Experiencia y retención del jugador"
         eyebrow="Encuestas y comentarios"
-        description="Analiza satisfacción, frustración e intención de volver para relacionar problemas de balance o rendimiento con retención futura."
+        description="Analiza satisfacción y frustración. La intención de retorno se usa como aproximación de retención entre sesiones de playtest."
         badge={riskLabel(retentionLevel, 'Riesgo de retención')}
         badgeLevel={retentionLevel}
       >
@@ -392,7 +397,7 @@ export function App() {
           </div>
           <div className="experience-card">
             <Sparkles />
-            <span>Intención de retorno</span>
+            <span>Intención / retención estimada</span>
             <strong>{model.kpis.returnIntent}%</strong>
             <small>Perfil más fuerte: {topReturn?.profile}</small>
           </div>
@@ -426,7 +431,7 @@ export function App() {
             </ResponsiveContainer>
           </div>
           <div className="chart-box">
-            <h3>Perfiles por intención de retorno</h3>
+            <h3>Perfiles por intención / retención estimada</h3>
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={model.profiles} margin={{ top: 12, right: 14, left: 4, bottom: 18 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />

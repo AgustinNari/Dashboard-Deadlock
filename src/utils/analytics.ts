@@ -84,7 +84,15 @@ export const buildDashboardModel = (filters: Filters) => {
     satisfaction: Number(weightedAverage(feedbackRows.map((row) => ({ value: row.satisfaction, weight: row.responses }))).toFixed(1)),
     returnIntent: percent(weightedAverage(feedbackRows.map((row) => ({ value: row.returnIntent, weight: row.responses })))),
     avgDuration: Number(average(matchRows.map((row) => row.duration)).toFixed(1)),
+    winnerLoserGap: 0,
   };
+
+  const combatContribution = (row: MatchPlayerFact) => row.damage + row.kills * 900 + row.assists * 450;
+  const winnerContribution = average(matchRows.filter((row) => row.won).map(combatContribution));
+  const loserContribution = average(matchRows.filter((row) => !row.won).map(combatContribution));
+  kpis.winnerLoserGap = loserContribution
+    ? percent((Math.abs(winnerContribution - loserContribution) / loserContribution) * 100)
+    : 0;
 
   const heroRows = heroes.map((hero) => {
     const rows = matchRows.filter((row) => row.hero === hero);
@@ -93,6 +101,7 @@ export const buildDashboardModel = (filters: Filters) => {
     const kda = deaths ? rows.reduce((sum, row) => sum + row.kills + row.assists, 0) / deaths : 0;
     const winrate = played ? (rows.filter((row) => row.won).length / played) * 100 : 0;
     const pickRate = (played / totalPlayers) * 100;
+    const abandonment = played ? (rows.filter((row) => row.abandoned).length / played) * 100 : 0;
     const avgDamage = average(rows.map((row) => row.damage));
     const alert = winrate > 55 && pickRate > 13 ? 'Riesgo de balance' : winrate < 45 ? 'Debilidad potencial' : 'Estable';
 
@@ -101,6 +110,7 @@ export const buildDashboardModel = (filters: Filters) => {
       played,
       winrate: percent(winrate),
       pickRate: percent(pickRate),
+      abandonment: percent(abandonment),
       kda: Number(kda.toFixed(2)),
       avgDamage: Math.round(avgDamage),
       alert,

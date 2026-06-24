@@ -3,6 +3,7 @@ interface HeroRow {
   played: number;
   winrate: number;
   pickRate: number;
+  abandonment: number;
   kda: number;
   avgDamage: number;
   alert: string;
@@ -18,6 +19,7 @@ export function HeroRankingTable({ rows }: { rows: HeroRow[] }) {
             <th>Personaje</th>
             <th>Tasa de victoria</th>
             <th>Tasa de selección</th>
+            <th>Abandono</th>
             <th>KDA</th>
             <th>Daño prom.</th>
             <th>Señal</th>
@@ -31,6 +33,7 @@ export function HeroRankingTable({ rows }: { rows: HeroRow[] }) {
                 <td className="hero-name">{row.hero}</td>
                 <td>{row.winrate}%</td>
                 <td>{row.pickRate}%</td>
+                <td>{row.abandonment}%</td>
                 <td>{row.kda}</td>
                 <td>{row.avgDamage.toLocaleString('es-AR')}</td>
                 <td>
