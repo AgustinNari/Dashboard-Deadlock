@@ -42,18 +42,24 @@ const chartColors = {
   red: '#d96557',
 };
 
-const pieColors = ['#d7a84f', '#44be9a', '#4aa3b6', '#c77746', '#6f95d8'];
+const pieColors = ['#d7a84f', '#44be9a', '#d96557', '#c77746', '#6f95d8', '#8fcf6b'];
 
 const dimensionalCoverage = [
   { kind: 'Fact', name: 'Fact_PartidaJugador', tone: 'gold' },
   { kind: 'Fact', name: 'Fact_EventoGameplay', tone: 'green' },
   { kind: 'Fact', name: 'Fact_ErrorTecnico', tone: 'red' },
   { kind: 'Fact', name: 'Fact_Feedback', tone: 'blue' },
+  { kind: 'Dim', name: 'Dim_Personaje', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Habilidad', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Objeto', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Mapa', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Jugador', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Tiempo', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_VersionJuego', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Partida', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Region', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_TipoError', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_CategoriaFeedback', tone: 'muted' },
 ];
 
 function tooltipProps() {
@@ -101,13 +107,14 @@ export function App() {
         <div className="hero-content">
           <div className="system-badge">
             <Database size={16} />
-            Telemetría interna de playtest
+            Telemetría de playtest
           </div>
           <h1>Deadlock Playtest Analytics</h1>
           <p>Tablero Data Warehouse de playtest</p>
           <div className="hero-meta">
-            <span>MMR, regiones y versiones</span>
-            <span>Datos simulados locales</span>
+            <span>ELO/MMR, regiones y versiones</span>
+            <span>Dataset simulado local</span>
+            <span>Prototipo conceptual</span>
           </div>
         </div>
         <div className="radar-panel" aria-label="Estado operacional simulado">
@@ -183,7 +190,7 @@ export function App() {
       <Panel
         title="Cobertura del modelo dimensional"
         eyebrow="Data Warehouse"
-        description="Mapa rápido de las facts y dimensiones compartidas que alimentan el tablero. Sirve para explicar de dónde salen las métricas durante la presentación del TPO."
+        description="Mapa rápido de las facts y dimensiones principales que alimentan el tablero. Las builds se reconstruyen desde eventos de compra en Fact_EventoGameplay vinculados a Dim_Objeto."
       >
         <div className="coverage-grid">
           {dimensionalCoverage.map((item) => (
@@ -196,15 +203,15 @@ export function App() {
       </Panel>
 
       <Panel
-        title="Balance de héroes"
-        eyebrow="Telemetría de héroes"
+        title="Balance de personajes"
+        eyebrow="Telemetría de personajes"
         description="Detecta personajes demasiado fuertes o débiles combinando tasa de victoria, tasa de selección (pick rate), KDA y daño promedio."
         badge={riskLabel(balanceLevel, 'Riesgo de balance')}
         badgeLevel={balanceLevel}
       >
         <div className="section-grid two">
           <div className="chart-box">
-            <h3>Tasa de victoria (winrate) por héroe</h3>
+            <h3>Tasa de victoria (winrate) por personaje</h3>
             <ResponsiveContainer width="100%" height={290}>
               <BarChart data={model.heroRows} margin={{ top: 16, right: 18, left: 4, bottom: 42 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
@@ -241,7 +248,7 @@ export function App() {
       <Panel
         title="Rendimiento en partida"
         eyebrow="Flujo de partida"
-        description="Resume duración, abandono y eventos de gameplay para decidir si el ritmo de partida funciona por mapa, versión y rango de MMR."
+        description="Resume duración, abandono y eventos de gameplay para decidir si el ritmo de partida funciona por mapa, versión y rango competitivo (ELO/MMR)."
       >
         <div className="mini-strip">
           <div>
@@ -322,8 +329,8 @@ export function App() {
                 <YAxis stroke="#aab4bd" />
                 <Tooltip {...tooltipProps()} />
                 <Legend />
-                <Bar dataKey="errores" fill={chartColors.blue} radius={[5, 5, 0, 0]} />
-                <Line type="monotone" dataKey="crashes" stroke={chartColors.red} strokeWidth={3} />
+                <Bar dataKey="errores" name="Errores" fill={chartColors.blue} radius={[5, 5, 0, 0]} />
+                <Line type="monotone" dataKey="crashes" name="Crashes" stroke={chartColors.red} strokeWidth={3} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>

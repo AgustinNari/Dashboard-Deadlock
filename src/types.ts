@@ -62,7 +62,7 @@ export interface FeedbackFact {
   region: Region;
   map: MapName;
   mmr: MmrRange;
-  category: 'Balance' | 'Rendimiento' | 'Matchmaking' | 'Claridad visual' | 'Diversión';
+  category: 'Balance' | 'Rendimiento' | 'Bug' | 'Frustración' | 'Diversión' | 'Sugerencia';
   satisfaction: number;
   returnIntent: number;
   profile: 'Competitivo' | 'Casual' | 'Nuevo jugador' | 'Tester técnico';

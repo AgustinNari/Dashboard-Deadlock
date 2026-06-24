@@ -46,7 +46,7 @@ export function FiltersBar({ filters, onChange }: FiltersBarProps) {
         </select>
       </label>
       <label>
-        MMR
+        ELO / MMR
         <select value={filters.mmr} onChange={(event) => update('mmr', event.target.value as Filters['mmr'])}>
           <option>Todos</option>
           {mmrRanges.map((mmr) => (

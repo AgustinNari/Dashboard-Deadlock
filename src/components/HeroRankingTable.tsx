@@ -15,7 +15,7 @@ export function HeroRankingTable({ rows }: { rows: HeroRow[] }) {
       <table>
         <thead>
           <tr>
-            <th>Héroe</th>
+            <th>Personaje</th>
             <th>Tasa de victoria</th>
             <th>Tasa de selección</th>
             <th>KDA</th>
@@ -24,7 +24,7 @@ export function HeroRankingTable({ rows }: { rows: HeroRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {rows
+          {[...rows]
             .sort((a, b) => b.winrate - a.winrate)
             .map((row) => (
               <tr key={row.hero}>

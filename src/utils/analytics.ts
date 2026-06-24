@@ -177,7 +177,7 @@ export const buildDashboardModel = (filters: Filters) => {
     .sort((a, b) => b.occurrences - a.occurrences)
     .slice(0, 8);
 
-  const feedbackByCategory = ['Balance', 'Rendimiento', 'Matchmaking', 'Claridad visual', 'Diversión'].map((category) => {
+  const feedbackByCategory = ['Balance', 'Rendimiento', 'Bug', 'Frustración', 'Diversión', 'Sugerencia'].map((category) => {
     const rows = feedbackRows.filter((row) => row.category === category);
     return {
       category,
