@@ -95,11 +95,11 @@ export function App() {
           <div className="hero-meta">
             <span>Estilo interno Valve</span>
             <span>MMR, regiones y versiones</span>
-            <span>Datos mock locales</span>
+            <span>Datos simulados locales</span>
           </div>
         </div>
         <div className="radar-panel" aria-label="Estado operacional simulado">
-          <span>DW sync filtrado</span>
+          <span>Sincronización DW filtrada</span>
           <strong>{model.matchRows.length.toLocaleString('es-AR')}</strong>
           <small>registros filtrados</small>
         </div>
@@ -149,7 +149,7 @@ export function App() {
           signal={riskLabel(crashLevel, 'Riesgo técnico')}
           level={crashLevel}
         />
-        <KpiCard icon="fps" label="FPS promedio" value={`${model.kpis.avgFps}`} detail="cliente de playtest" signal="Estable" />
+        <KpiCard icon="fps" label="FPS promedio" value={`${model.kpis.avgFps}`} detail="Sesiones de playtest" signal="Estable" />
         <KpiCard
           icon="satisfaction"
           label="Satisfacción promedio"
@@ -194,9 +194,9 @@ export function App() {
           <div className="chart-box">
             <h3>Tasa de victoria (winrate) por héroe</h3>
             <ResponsiveContainer width="100%" height={290}>
-              <BarChart data={model.heroRows} margin={{ top: 12, right: 16, left: 0, bottom: 32 }}>
+              <BarChart data={model.heroRows} margin={{ top: 16, right: 18, left: 4, bottom: 42 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
-                <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-28} textAnchor="end" height={62} />
+                <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-24} textAnchor="end" height={70} />
                 <YAxis stroke="#aab4bd" domain={[35, 65]} />
                 <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(215,168,79,.08)' }} />
                 <Bar dataKey="winrate" name="Tasa de victoria %" radius={[5, 5, 0, 0]}>
@@ -210,9 +210,9 @@ export function App() {
           <div className="chart-box">
             <h3>Tasa de selección (pick rate) y KDA promedio</h3>
             <ResponsiveContainer width="100%" height={290}>
-              <ComposedChart data={model.heroRows} margin={{ top: 12, right: 16, left: 0, bottom: 32 }}>
+              <ComposedChart data={model.heroRows} margin={{ top: 16, right: 20, left: 4, bottom: 42 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
-                <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-28} textAnchor="end" height={62} />
+                <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-24} textAnchor="end" height={70} />
                 <YAxis yAxisId="left" stroke="#aab4bd" />
                 <YAxis yAxisId="right" orientation="right" stroke="#aab4bd" />
                 <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(74,163,182,.08)' }} />
@@ -249,7 +249,7 @@ export function App() {
           <div className="chart-box">
             <h3>Abandono por mapa</h3>
             <ResponsiveContainer width="100%" height={235}>
-              <BarChart data={model.abandonmentByMap}>
+              <BarChart data={model.abandonmentByMap} margin={{ top: 12, right: 12, left: 4, bottom: 18 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="map" stroke="#aab4bd" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#aab4bd" />
@@ -261,7 +261,7 @@ export function App() {
           <div className="chart-box">
             <h3>Evolución por versión</h3>
             <ResponsiveContainer width="100%" height={235}>
-              <LineChart data={model.versionTrend}>
+              <LineChart data={model.versionTrend} margin={{ top: 12, right: 18, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="version" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
@@ -275,7 +275,7 @@ export function App() {
           <div className="chart-box">
             <h3>Eventos por fase</h3>
             <ResponsiveContainer width="100%" height={235}>
-              <BarChart data={model.phaseDistribution}>
+              <BarChart data={model.phaseDistribution} margin={{ top: 12, right: 12, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="phase" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
@@ -288,7 +288,7 @@ export function App() {
           </div>
         </div>
         <div className="chart-box">
-          <h3>Heatmap de eventos por minuto y fase</h3>
+          <h3>Mapa de calor de eventos por minuto y fase</h3>
           <EventHeatmap rows={model.heatmap} />
         </div>
       </Panel>
@@ -304,7 +304,7 @@ export function App() {
           <div className="chart-box">
             <h3>Errores técnicos por versión</h3>
             <ResponsiveContainer width="100%" height={260}>
-              <ComposedChart data={model.errorsByVersion}>
+              <ComposedChart data={model.errorsByVersion} margin={{ top: 14, right: 18, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="version" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
@@ -318,10 +318,10 @@ export function App() {
           <div className="chart-box">
             <h3>Crashes, desconexiones y errores por tipo</h3>
             <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={model.errorsByType} layout="vertical" margin={{ left: 72 }}>
+              <BarChart data={model.errorsByType} layout="vertical" margin={{ top: 12, right: 20, left: 98, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis type="number" stroke="#aab4bd" />
-                <YAxis type="category" dataKey="type" stroke="#aab4bd" width={90} />
+                <YAxis type="category" dataKey="type" stroke="#aab4bd" width={118} />
                 <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(217,101,87,.08)' }} />
                 <Bar dataKey="count" name="Ocurrencias" fill={chartColors.red} radius={[0, 5, 5, 0]} />
               </BarChart>
@@ -332,7 +332,7 @@ export function App() {
           <div className="chart-box">
             <h3>FPS promedio por región</h3>
             <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={model.fpsByRegion}>
+              <BarChart data={model.fpsByRegion} margin={{ top: 12, right: 14, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="region" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" domain={[70, 140]} />
@@ -344,7 +344,7 @@ export function App() {
           <div className="chart-box">
             <h3>Latencia promedio por región</h3>
             <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={model.fpsByRegion}>
+              <BarChart data={model.fpsByRegion} margin={{ top: 12, right: 14, left: 4, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="region" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
@@ -359,7 +359,7 @@ export function App() {
 
       <Panel
         title="Experiencia y retención del jugador"
-        eyebrow="Encuestas y feedback"
+        eyebrow="Encuestas y comentarios"
         description="Analiza satisfacción, frustración e intención de volver para relacionar problemas de balance o rendimiento con retención futura."
         badge={riskLabel(retentionLevel, 'Riesgo de retención')}
         badgeLevel={retentionLevel}
@@ -379,14 +379,14 @@ export function App() {
           </div>
           <div className="experience-card">
             <ShieldAlert />
-            <span>Perfil de riesgo</span>
+            <span>Mayor riesgo de no retorno</span>
             <strong>{lowReturn?.profile}</strong>
             <small>{lowReturn?.returnIntent}% de intención de retorno</small>
           </div>
         </div>
         <div className="section-grid two">
           <div className="chart-box">
-            <h3>Feedback por categoría</h3>
+            <h3>Comentarios por categoría</h3>
             <ResponsiveContainer width="100%" height={270}>
               <PieChart>
                 <Pie
@@ -409,7 +409,7 @@ export function App() {
           <div className="chart-box">
             <h3>Perfiles por intención de retorno</h3>
             <ResponsiveContainer width="100%" height={270}>
-              <BarChart data={model.profiles} margin={{ bottom: 12 }}>
+              <BarChart data={model.profiles} margin={{ top: 12, right: 14, left: 4, bottom: 18 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="profile" stroke="#aab4bd" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#aab4bd" domain={[45, 95]} />
@@ -436,7 +436,7 @@ export function App() {
               <div className="score-bar">
                 <i style={{ width: `${item.score}%` }} />
               </div>
-              <small>Score simulado: {item.score}/100</small>
+              <small>Puntaje simulado: {item.score}/100</small>
             </article>
           ))}
         </div>
