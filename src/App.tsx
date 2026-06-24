@@ -49,17 +49,16 @@ const dimensionalCoverage = [
   { kind: 'Fact', name: 'Fact_EventoGameplay', tone: 'green' },
   { kind: 'Fact', name: 'Fact_ErrorTecnico', tone: 'red' },
   { kind: 'Fact', name: 'Fact_Feedback', tone: 'blue' },
+  { kind: 'Dim', name: 'Dim_Jugador', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Personaje', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Habilidad', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Objeto', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_Mapa', tone: 'muted' },
-  { kind: 'Dim', name: 'Dim_Jugador', tone: 'muted' },
-  { kind: 'Dim', name: 'Dim_Tiempo', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_VersionJuego', tone: 'muted' },
-  { kind: 'Dim', name: 'Dim_Partida', tone: 'muted' },
-  { kind: 'Dim', name: 'Dim_Region', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Tiempo', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_TipoError', tone: 'muted' },
   { kind: 'Dim', name: 'Dim_CategoriaFeedback', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Region', tone: 'muted' },
 ];
 
 function tooltipProps() {
@@ -114,7 +113,7 @@ export function App() {
           <div className="hero-meta">
             <span>ELO/MMR, regiones y versiones</span>
             <span>Dataset simulado local</span>
-            <span>Prototipo conceptual</span>
+            <span>Prototipo analítico local</span>
           </div>
         </div>
         <div className="radar-panel" aria-label="Estado operacional simulado">
@@ -190,7 +189,7 @@ export function App() {
       <Panel
         title="Cobertura del modelo dimensional"
         eyebrow="Data Warehouse"
-        description="Mapa rápido de las facts y dimensiones principales que alimentan el tablero. Las builds se reconstruyen desde eventos de compra en Fact_EventoGameplay vinculados a Dim_Objeto."
+        description="Resume las facts y dimensiones que alimentan las métricas del tablero. En el modelo dimensional, los héroes se representan mediante Dim_Personaje y las builds se reconstruyen desde eventos de compra en Fact_EventoGameplay vinculados a Dim_Objeto."
       >
         <div className="coverage-grid">
           {dimensionalCoverage.map((item) => (
@@ -203,15 +202,15 @@ export function App() {
       </Panel>
 
       <Panel
-        title="Balance de personajes"
-        eyebrow="Telemetría de personajes"
-        description="Detecta personajes demasiado fuertes o débiles combinando tasa de victoria, tasa de selección (pick rate), KDA y daño promedio."
+        title="Balance de héroes"
+        eyebrow="Telemetría de héroes"
+        description="Detecta héroes demasiado fuertes o débiles combinando tasa de victoria, tasa de selección (pick rate), KDA, daño promedio y abandono."
         badge={riskLabel(balanceLevel, 'Riesgo de balance')}
         badgeLevel={balanceLevel}
       >
         <div className="section-grid two">
           <div className="chart-box">
-            <h3>Tasa de victoria (winrate) por personaje</h3>
+            <h3>Tasa de victoria (winrate) por héroe</h3>
             <ResponsiveContainer width="100%" height={290}>
               <BarChart data={model.heroRows} margin={{ top: 16, right: 18, left: 4, bottom: 42 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
@@ -227,7 +226,7 @@ export function App() {
             </ResponsiveContainer>
           </div>
           <div className="chart-box">
-            <h3>Tasa de selección (pick rate) y KDA promedio</h3>
+            <h3>Tasa de selección (pick rate) y KDA promedio por héroe</h3>
             <ResponsiveContainer width="100%" height={290}>
               <ComposedChart data={model.heroRows} margin={{ top: 16, right: 20, left: 4, bottom: 42 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
@@ -448,7 +447,7 @@ export function App() {
       <Panel
         title="Vista predictiva / Data Mining"
         eyebrow="Capa predictiva simulada"
-        description="Vista conceptual para mostrar cómo el Data Warehouse podría alimentar modelos de predicción de abandono y retorno al próximo playtest."
+        description="Vista simulada de cómo el Data Warehouse puede alimentar modelos de predicción de abandono y retorno al próximo playtest."
         className="mining-panel"
       >
         <div className="mining-grid">

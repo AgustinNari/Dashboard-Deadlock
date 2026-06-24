@@ -1,62 +1,84 @@
 # Deadlock Playtest Analytics
 
-Tablero local para presentar el TPO de Ciencia de Datos sobre una solución analítica para el playtest de Deadlock. La interfaz funciona como prototipo visual de análisis de playtest con foco en balance, rendimiento en partida, estabilidad técnica y experiencia/retención del jugador.
+Prototipo local de dashboard analítico para explorar métricas simuladas de un playtest competitivo. El proyecto representa cómo un Data Warehouse puede alimentar indicadores de balance, rendimiento técnico, experiencia de jugadores y modelos predictivos.
+
+## Objetivo
+
+Centralizar métricas simuladas del playtest y ofrecer una vista analítica sobre:
+
+- balance de héroes;
+- rendimiento en partida;
+- estabilidad técnica;
+- feedback y retención;
+- predicción de abandono y retorno.
 
 ## Stack
 
-- React + Vite
+- React
+- Vite
 - TypeScript
 - Recharts
-- Dataset simulado local sin backend
 - CSS propio
+- Datos simulados locales
 
-## Cómo correr
+## Datos simulados
+
+El proyecto no utiliza datos reales. Los datasets locales simulan partidas, eventos de gameplay, errores técnicos, feedback, versiones del juego, regiones, mapas, héroes y perfiles de jugadores.
+
+No existe conexión con un backend, servicios externos ni APIs. Los datos no representan información oficial de Valve o Deadlock.
+
+## Modelo analítico representado
+
+Facts:
+
+- `Fact_PartidaJugador`
+- `Fact_EventoGameplay`
+- `Fact_ErrorTecnico`
+- `Fact_Feedback`
+
+Dimensiones:
+
+- `Dim_Jugador`
+- `Dim_Personaje`
+- `Dim_Habilidad`
+- `Dim_Objeto`
+- `Dim_Mapa`
+- `Dim_VersionJuego`
+- `Dim_Tiempo`
+- `Dim_TipoError`
+- `Dim_CategoriaFeedback`
+- `Dim_Region`
+
+En el modelo dimensional, los héroes del juego se representan mediante `Dim_Personaje`. Las builds se reconstruyen desde eventos de compra en `Fact_EventoGameplay` vinculados a `Dim_Objeto`.
+
+## Funcionalidades
+
+- Filtros interactivos por versión, región, mapa, rango competitivo (ELO/MMR) y período.
+- KPIs de tasa de victoria (winrate), abandono por héroe, brecha ganador/perdedor, tasa de crashes, FPS, satisfacción e intención / retención estimada.
+- Badges de Riesgo de balance, Riesgo técnico, Riesgo de retención y Estable.
+- Gráficos y ranking de balance de héroes.
+- Métricas de duración, abandono y eventos por fase de partida.
+- Análisis de errores técnicos, FPS y latencia.
+- Distribución de feedback y señales de retención.
+- Vista predictiva / Data Mining simulada para abandono y retorno al siguiente playtest.
+
+## Cómo ejecutar
 
 ```bash
 npm install
 npm run dev
-npm run build
 ```
 
-Para desarrollo, abrir la URL local que muestre Vite con `npm run dev`, normalmente `http://localhost:5173`. `npm run build` genera la versión de producción en `dist`.
+Vite mostrará la URL local de desarrollo, normalmente `http://localhost:5173`.
 
-## Qué incluye
-
-- Filtros interactivos por versión, región, mapa, rango competitivo (ELO/MMR) y período.
-- KPIs de tasa de victoria (winrate), abandono por personaje, brecha ganador/perdedor, tasa de crashes, FPS, satisfacción e intención / retención estimada.
-- Badges de alerta: Riesgo de balance, Riesgo técnico, Riesgo de retención y Estable.
-- Cobertura visual del modelo dimensional con facts y dimensiones compartidas.
-- Secciones de balance de personajes, rendimiento en partida, rendimiento técnico y experiencia/retención del jugador.
-- Tablas de señales de desbalance y errores críticos.
-- Vista predictiva / Data Mining con predicciones simuladas.
-
-Los datos son ficticios y están diseñados para simular hechos del modelo dimensional: `Fact_PartidaJugador`, `Fact_EventoGameplay`, `Fact_ErrorTecnico` y `Fact_Feedback`, junto con dimensiones como `Dim_Jugador`, `Dim_Tiempo`, `Dim_VersionJuego`, `Dim_Partida`, `Dim_Region`, `Dim_Personaje`, `Dim_Habilidad`, `Dim_Objeto`, `Dim_Mapa`, `Dim_TipoError` y `Dim_CategoriaFeedback`.
-
-## Relación con el TPO
-
-El tablero representa una solución analítica para un playtest de Deadlock. Integra fuentes simuladas de partidas, telemetría de gameplay, personajes, logs técnicos y comentarios de jugadores. Esas fuentes alimentan KPIs de balance, rendimiento en partida, rendimiento técnico y experiencia/retención.
-
-La sección de cobertura dimensional muestra cómo las métricas se apoyan en las facts principales del modelo: `Fact_PartidaJugador`, `Fact_EventoGameplay`, `Fact_ErrorTecnico` y `Fact_Feedback`. Las dimensiones compartidas permiten filtrar y comparar por jugador, tiempo, versión, partida, región, personaje, mapa, objetos, habilidades, tipo de error y categoría de feedback. Las builds se reconstruyen desde eventos de compra en `Fact_EventoGameplay` vinculados a `Dim_Objeto`.
-
-La vista predictiva / Data Mining simula cómo el Data Warehouse podría servir como base para modelos de predicción de abandono y retorno al próximo playtest.
-
-## Guion breve para presentar el dashboard
-
-1. Presentar el objetivo del tablero: analizar un playtest desde balance, rendimiento, estabilidad y retención.
-2. Mostrar los filtros globales por versión, región, mapa, rango competitivo (ELO/MMR) y período.
-3. Explicar los KPIs principales: tasa de victoria, abandono, crashes, FPS, satisfacción e intención de retorno.
-4. Recorrer Balance de personajes para detectar riesgo de balance o debilidad potencial.
-5. Recorrer Rendimiento en partida para analizar duración, brecha ganador/perdedor, abandono por mapa y eventos por fase.
-6. Recorrer Rendimiento técnico para priorizar errores, crashes, latencia y FPS.
-7. Recorrer Experiencia y retención del jugador para conectar satisfacción, comentarios e intención de retorno como aproximación de retención entre sesiones.
-8. Cerrar con la vista predictiva / Data Mining como posible evolución del TPO.
-
-## Verificación
-
-El proyecto compila con:
+## Build
 
 ```bash
 npm run build
 ```
 
-Puede aparecer una advertencia no bloqueante de Vite/Recharts sobre el tamaño del bundle generado. No impide ejecutar ni presentar el tablero.
+La versión de producción se genera en `dist`. Recharts puede producir una advertencia no bloqueante por el tamaño del bundle durante el build.
+
+## Alcance
+
+Este proyecto es un prototipo analítico local con datos simulados. Su alcance se limita a la exploración visual de métricas de playtest y no representa una herramienta oficial de Valve o Deadlock.
