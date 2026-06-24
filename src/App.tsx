@@ -108,7 +108,17 @@ export function App() {
             <Database size={16} />
             Telemetría de playtest
           </div>
-          <h1>Deadlock Playtest Analytics</h1>
+          <div className="hero-title-row">
+            <img
+              className="hero-mark"
+              src="/assets/deadlock-mark.png"
+              alt="Deadlock mark"
+              onError={(event) => {
+                event.currentTarget.style.display = 'none';
+              }}
+            />
+            <h1>Deadlock Playtest Analytics</h1>
+          </div>
           <p>Tablero Data Warehouse de playtest</p>
           <div className="hero-meta">
             <span>ELO/MMR, regiones y versiones</span>

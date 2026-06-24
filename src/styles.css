@@ -92,9 +92,27 @@ select {
   text-transform: uppercase;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 16px 0 8px;
+}
+
+.hero-mark {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(215, 168, 79, 0.18);
+  border-radius: 8px;
+  object-fit: contain;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 18px rgba(68, 190, 154, 0.2));
+}
+
 .hero h1 {
   max-width: 880px;
-  margin: 16px 0 8px;
+  margin: 0;
   color: #fff4d8;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 4.28rem;
@@ -676,6 +694,11 @@ tr:last-child td {
 }
 
 @media (max-width: 1500px) {
+  .hero-mark {
+    width: 54px;
+    height: 54px;
+  }
+
   .kpi-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
