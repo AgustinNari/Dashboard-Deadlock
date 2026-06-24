@@ -106,7 +106,6 @@ export function App() {
           <h1>Deadlock Playtest Analytics</h1>
           <p>Tablero Data Warehouse de playtest</p>
           <div className="hero-meta">
-            <span>Estilo interno Valve</span>
             <span>MMR, regiones y versiones</span>
             <span>Datos simulados locales</span>
           </div>
