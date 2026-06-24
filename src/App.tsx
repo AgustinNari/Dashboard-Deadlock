@@ -56,12 +56,25 @@ const dimensionalCoverage = [
   { kind: 'Dim', name: 'Dim_Region', tone: 'muted' },
 ];
 
-function tooltipStyle() {
+function tooltipProps() {
   return {
-    background: '#101820',
-    border: '1px solid rgba(215, 168, 79, .26)',
-    borderRadius: 8,
-    color: '#f1eadc',
+    contentStyle: {
+      background: '#101a18',
+      border: '1px solid rgba(215, 168, 79, .46)',
+      borderRadius: 8,
+      color: '#f6eddc',
+      boxShadow: '0 12px 28px rgba(0, 0, 0, .42)',
+    },
+    labelStyle: {
+      color: '#f6eddc',
+      fontWeight: 800,
+    },
+    itemStyle: {
+      color: '#f6eddc',
+    },
+    wrapperStyle: {
+      zIndex: 20,
+    },
   };
 }
 
@@ -198,7 +211,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-24} textAnchor="end" height={70} />
                 <YAxis stroke="#aab4bd" domain={[35, 65]} />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(215,168,79,.08)' }} />
+                <Tooltip {...tooltipProps()} cursor={{ fill: 'rgba(215,168,79,.08)' }} />
                 <Bar dataKey="winrate" name="Tasa de victoria %" radius={[5, 5, 0, 0]}>
                   {model.heroRows.map((row) => (
                     <Cell key={row.hero} fill={row.winrate > 55 ? chartColors.gold : row.winrate < 45 ? chartColors.red : chartColors.green} />
@@ -215,7 +228,7 @@ export function App() {
                 <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-24} textAnchor="end" height={70} />
                 <YAxis yAxisId="left" stroke="#aab4bd" />
                 <YAxis yAxisId="right" orientation="right" stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(74,163,182,.08)' }} />
+                <Tooltip {...tooltipProps()} cursor={{ fill: 'rgba(74,163,182,.08)' }} />
                 <Legend />
                 <Bar yAxisId="left" dataKey="pickRate" name="Tasa de selección %" fill={chartColors.teal} radius={[5, 5, 0, 0]} />
                 <Line yAxisId="right" type="monotone" dataKey="kda" name="KDA promedio" stroke={chartColors.gold} strokeWidth={3} dot={{ r: 3 }} />
@@ -253,7 +266,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="map" stroke="#aab4bd" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(201,119,70,.09)' }} />
+                <Tooltip {...tooltipProps()} cursor={{ fill: 'rgba(201,119,70,.09)' }} />
                 <Bar dataKey="abandonment" name="Abandono %" fill={chartColors.copper} radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -265,7 +278,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="version" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Legend />
                 <Line type="monotone" dataKey="winrate" name="Tasa de victoria %" stroke={chartColors.gold} strokeWidth={3} />
                 <Line type="monotone" dataKey="satisfaction" name="Satisfacción" stroke={chartColors.green} strokeWidth={3} />
@@ -279,10 +292,10 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="phase" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Legend />
                 <Bar dataKey="objectives" name="Objetivos" stackId="a" fill={chartColors.gold} radius={[5, 5, 0, 0]} />
-                <Bar dataKey="fights" name="Teamfights" stackId="a" fill={chartColors.green} radius={[5, 5, 0, 0]} />
+                <Bar dataKey="fights" name="Peleas de equipo" stackId="a" fill={chartColors.green} radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -308,7 +321,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="version" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Legend />
                 <Bar dataKey="errores" fill={chartColors.blue} radius={[5, 5, 0, 0]} />
                 <Line type="monotone" dataKey="crashes" stroke={chartColors.red} strokeWidth={3} />
@@ -321,8 +334,8 @@ export function App() {
               <BarChart data={model.errorsByType} layout="vertical" margin={{ top: 12, right: 20, left: 98, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis type="number" stroke="#aab4bd" />
-                <YAxis type="category" dataKey="type" stroke="#aab4bd" width={118} />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(217,101,87,.08)' }} />
+                <YAxis type="category" dataKey="label" stroke="#aab4bd" width={156} tick={{ fontSize: 11 }} />
+                <Tooltip {...tooltipProps()} cursor={{ fill: 'rgba(217,101,87,.08)' }} />
                 <Bar dataKey="count" name="Ocurrencias" fill={chartColors.red} radius={[0, 5, 5, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -336,7 +349,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="region" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" domain={[70, 140]} />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Bar dataKey="fps" fill={chartColors.green} radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -348,7 +361,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="region" stroke="#aab4bd" />
                 <YAxis stroke="#aab4bd" />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Bar dataKey="latency" name="Latencia ms" fill={chartColors.copper} radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -401,7 +414,7 @@ export function App() {
                     <Cell key={entry.category} fill={pieColors[index % pieColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -413,7 +426,7 @@ export function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="profile" stroke="#aab4bd" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#aab4bd" domain={[45, 95]} />
-                <Tooltip contentStyle={tooltipStyle()} />
+                <Tooltip {...tooltipProps()} />
                 <Bar dataKey="returnIntent" name="Retorno %" fill={chartColors.gold} radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>

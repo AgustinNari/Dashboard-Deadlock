@@ -1,5 +1,13 @@
 import { TechnicalErrorFact } from '../types';
 
+const errorLabels: Record<TechnicalErrorFact['type'], string> = {
+  Crash: 'Crash',
+  Disconnect: 'Desconexión',
+  'Render hitch': 'Tirón de renderizado',
+  'Packet loss': 'Pérdida de paquetes',
+  'Audio desync': 'Desincronización de audio',
+};
+
 export function CriticalErrorsTable({ rows }: { rows: TechnicalErrorFact[] }) {
   return (
     <div className="table-wrap">
@@ -17,7 +25,7 @@ export function CriticalErrorsTable({ rows }: { rows: TechnicalErrorFact[] }) {
         <tbody>
           {rows.map((row) => (
             <tr key={row.id}>
-              <td className="hero-name">{row.type}</td>
+              <td className="hero-name">{errorLabels[row.type]}</td>
               <td>{row.version}</td>
               <td>{row.region}</td>
               <td>{row.map}</td>

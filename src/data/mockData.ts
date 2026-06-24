@@ -153,6 +153,14 @@ export const technicalErrorFacts: TechnicalErrorFact[] = versions.flatMap((versi
 );
 
 let feedbackId = 1;
+const categoryWeights = {
+  Balance: 1.22,
+  Rendimiento: 1.08,
+  Matchmaking: 0.84,
+  'Claridad visual': 0.72,
+  Diversión: 0.96,
+};
+
 export const feedbackFacts: FeedbackFact[] = versions.flatMap((version, versionIndex) =>
   regions.flatMap((region, regionIndex) =>
     maps.flatMap((map, mapIndex) =>
@@ -163,6 +171,9 @@ export const feedbackFacts: FeedbackFact[] = versions.flatMap((version, versionI
           const categoryPenalty = category === 'Rendimiento' ? regionIndex * 0.13 : category === 'Balance' ? mmrIndex * 0.12 : 0;
           const satisfaction = Math.max(4.8, Math.min(9.2, 6.65 + patchLift - mapPenalty - categoryPenalty + ((categoryIndex + mmrIndex) % 3) * 0.18));
           const returnIntent = Math.max(48, Math.min(91, satisfaction * 9.5 + versionIndex * 2 - mapIndex * 4 - (category === 'Matchmaking' ? 5 : 0)));
+          const baseResponses = 28 + versionIndex * 4 + regionIndex * 2 + mmrIndex * 3 - mapIndex;
+          const categoryVolatility = category === 'Rendimiento' && regionIndex > 1 ? 6 : category === 'Balance' && mmr === 'Alto' ? 5 : 0;
+          const mapTopicLift = category === 'Claridad visual' && map === 'Modo experimental' ? 8 : category === 'Diversión' && map === 'Mapa principal' ? 4 : 0;
 
           return {
             id: feedbackId++,
@@ -174,7 +185,7 @@ export const feedbackFacts: FeedbackFact[] = versions.flatMap((version, versionI
             satisfaction: Number(satisfaction.toFixed(1)),
             returnIntent: Math.round(returnIntent),
             profile: categoryIndex === 0 ? 'Competitivo' : categoryIndex === 1 ? 'Tester técnico' : categoryIndex === 2 ? 'Nuevo jugador' : 'Casual',
-            responses: 28 + versionIndex * 4 + regionIndex * 2 + mmrIndex * 3 - mapIndex,
+            responses: Math.max(12, Math.round(baseResponses * categoryWeights[category] + categoryVolatility + mapTopicLift - categoryIndex)),
           };
         }),
       ),

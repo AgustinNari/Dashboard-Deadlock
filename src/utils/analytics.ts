@@ -20,6 +20,20 @@ const periodWeight = {
   '30 días': 1,
 };
 
+const phaseLabels = {
+  Early: 'Temprana',
+  Mid: 'Media',
+  Late: 'Tardía',
+};
+
+const errorLabels = {
+  Crash: 'Crash',
+  Disconnect: 'Desconexión',
+  'Render hitch': 'Tirón de renderizado',
+  'Packet loss': 'Pérdida de paquetes',
+  'Audio desync': 'Desincronización de audio',
+};
+
 const percent = (value: number) => Number(value.toFixed(1));
 const average = (values: number[]) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0);
 const weightedAverage = (items: { value: number; weight: number }[]) => {
@@ -116,22 +130,22 @@ export const buildDashboardModel = (filters: Filters) => {
     };
   });
 
-  const phaseDistribution = ['Early', 'Mid', 'Late'].map((phase) => {
+  const phaseDistribution = (['Early', 'Mid', 'Late'] as const).map((phase) => {
     const rows = eventRows.filter((row) => row.phase === phase);
     return {
-      phase,
+      phase: phaseLabels[phase],
       events: rows.reduce((sum, row) => sum + row.count, 0),
       objectives: rows.filter((row) => row.eventType === 'Objective').reduce((sum, row) => sum + row.count, 0),
       fights: rows.filter((row) => row.eventType === 'Teamfight').reduce((sum, row) => sum + row.count, 0),
     };
   });
 
-  const heatmap = ['Early', 'Mid', 'Late'].map((phase) => ({
-    phase,
+  const heatmap = (['Early', 'Mid', 'Late'] as const).map((phase) => ({
+    phase: phaseLabels[phase],
     minutes: Array.from({ length: 8 }, (_, index) => {
       const rows = eventRows.filter((row) => row.phase === phase && row.minute % 10 === index + 1);
       return {
-        label: `${phase[0]}${index + 1}`,
+        label: `${phaseLabels[phase].slice(0, 1)}${index + 1}`,
         value: rows.reduce((sum, row) => sum + row.count, 0),
       };
     }),
@@ -152,8 +166,9 @@ export const buildDashboardModel = (filters: Filters) => {
     };
   });
 
-  const errorsByType = ['Crash', 'Disconnect', 'Render hitch', 'Packet loss', 'Audio desync'].map((type) => ({
+  const errorsByType = (['Crash', 'Disconnect', 'Render hitch', 'Packet loss', 'Audio desync'] as const).map((type) => ({
     type,
+    label: errorLabels[type],
     count: errorRows.filter((row) => row.type === type).reduce((sum, row) => sum + row.occurrences, 0),
   }));
 

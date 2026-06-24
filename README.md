@@ -15,9 +15,10 @@ Tablero local para presentar el TPO de Ciencia de Datos sobre una solución anal
 ```bash
 npm install
 npm run dev
+npm run build
 ```
 
-Luego abrir la URL local que muestre Vite, normalmente `http://localhost:5173`.
+Para desarrollo, abrir la URL local que muestre Vite con `npm run dev`, normalmente `http://localhost:5173`. `npm run build` genera la versión de producción en `dist`.
 
 ## Qué incluye
 
