@@ -21,9 +21,9 @@ const periodWeight = {
 };
 
 const phaseLabels = {
-  Early: 'Temprana',
-  Mid: 'Media',
-  Late: 'Tardía',
+  Early: 'De Línea',
+  Mid: 'Mid Game',
+  Late: 'Late Game',
 };
 
 const errorLabels = {
