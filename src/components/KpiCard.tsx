@@ -16,13 +16,17 @@ interface KpiCardProps {
   label: string;
   value: string;
   detail: string;
+  signal?: string;
   level?: AlertLevel;
 }
 
-export function KpiCard({ icon, label, value, detail, level = 'ok' }: KpiCardProps) {
+export function KpiCard({ icon, label, value, detail, signal = 'Estable', level = 'ok' }: KpiCardProps) {
   return (
     <article className={`kpi-card ${level}`}>
-      <div className="kpi-icon">{icons[icon]}</div>
+      <div className="kpi-card-top">
+        <div className="kpi-icon">{icons[icon]}</div>
+        <span className={`status-pill ${level}`}>{signal}</span>
+      </div>
       <div>
         <span>{label}</span>
         <strong>{value}</strong>

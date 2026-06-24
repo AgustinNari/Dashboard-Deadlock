@@ -16,7 +16,7 @@ export function FiltersBar({ filters, onChange }: FiltersBarProps) {
     <div className="filters-shell">
       <div className="filters-title">
         <SlidersHorizontal size={18} />
-        <span>Playtest scope</span>
+        <span>Filtros del playtest</span>
       </div>
       <label>
         Versión

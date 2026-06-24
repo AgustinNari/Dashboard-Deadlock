@@ -15,7 +15,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { Activity, Database, Layers, ShieldAlert, Sparkles } from 'lucide-react';
+import { Activity, Bug, Database, Layers, Network, ShieldAlert, Sparkles, Users } from 'lucide-react';
 import { CriticalErrorsTable } from './components/CriticalErrorsTable';
 import { EventHeatmap } from './components/EventHeatmap';
 import { FiltersBar } from './components/FiltersBar';
@@ -44,6 +44,18 @@ const chartColors = {
 
 const pieColors = ['#d7a84f', '#44be9a', '#4aa3b6', '#c77746', '#6f95d8'];
 
+const dimensionalCoverage = [
+  { kind: 'Fact', name: 'Fact_PartidaJugador', tone: 'gold' },
+  { kind: 'Fact', name: 'Fact_EventoGameplay', tone: 'green' },
+  { kind: 'Fact', name: 'Fact_ErrorTecnico', tone: 'red' },
+  { kind: 'Fact', name: 'Fact_Feedback', tone: 'blue' },
+  { kind: 'Dim', name: 'Dim_Jugador', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Tiempo', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_VersionJuego', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Partida', tone: 'muted' },
+  { kind: 'Dim', name: 'Dim_Region', tone: 'muted' },
+];
+
 function tooltipStyle() {
   return {
     background: '#101820',
@@ -59,8 +71,15 @@ export function App() {
 
   const crashLevel = model.kpis.crashRate > 5 ? 'danger' : model.kpis.crashRate > 3 ? 'warning' : 'ok';
   const satisfactionLevel = model.kpis.satisfaction < 6.4 ? 'danger' : model.kpis.satisfaction < 7 ? 'warning' : 'ok';
+  const balanceLevel = model.heroRows.some((row) => row.alertLevel === 'danger')
+    ? 'danger'
+    : model.heroRows.some((row) => row.alertLevel === 'warning')
+      ? 'warning'
+      : 'ok';
+  const retentionLevel = model.kpis.returnIntent < 64 || model.kpis.satisfaction < 6.4 ? 'danger' : model.kpis.returnIntent < 74 ? 'warning' : 'ok';
   const topReturn = [...model.profiles].sort((a, b) => b.returnIntent - a.returnIntent)[0];
   const lowReturn = [...model.profiles].sort((a, b) => a.returnIntent - b.returnIntent)[0];
+  const riskLabel = (level: string, riskText: string) => (level === 'ok' ? 'Estable' : riskText);
 
   return (
     <main className="app-shell">
@@ -69,19 +88,18 @@ export function App() {
         <div className="hero-content">
           <div className="system-badge">
             <Database size={16} />
-            Internal playtest telemetry
+            Telemetría interna de playtest
           </div>
           <h1>Deadlock Playtest Analytics</h1>
-          <p>Playtest Data Warehouse Dashboard</p>
+          <p>Tablero Data Warehouse de playtest</p>
           <div className="hero-meta">
-            <span>Facts: PartidaJugador</span>
-            <span>EventoGameplay</span>
-            <span>ErrorTecnico</span>
-            <span>Feedback</span>
+            <span>Estilo interno Valve</span>
+            <span>MMR, regiones y versiones</span>
+            <span>Datos mock locales</span>
           </div>
         </div>
         <div className="radar-panel" aria-label="Estado operacional simulado">
-          <span>DW Sync</span>
+          <span>DW sync filtrado</span>
           <strong>{model.matchRows.length.toLocaleString('es-AR')}</strong>
           <small>registros filtrados</small>
         </div>
@@ -89,38 +107,99 @@ export function App() {
 
       <FiltersBar filters={filters} onChange={setFilters} />
 
+      <section className="command-strip" aria-label="Resumen de riesgos del playtest">
+        <article>
+          <Bug size={18} />
+          <span>Riesgo técnico</span>
+          <strong className={`status-pill ${crashLevel}`}>{riskLabel(crashLevel, 'Riesgo técnico')}</strong>
+        </article>
+        <article>
+          <Users size={18} />
+          <span>Riesgo de balance</span>
+          <strong className={`status-pill ${balanceLevel}`}>{riskLabel(balanceLevel, 'Riesgo de balance')}</strong>
+        </article>
+        <article>
+          <Network size={18} />
+          <span>Riesgo de retención</span>
+          <strong className={`status-pill ${retentionLevel}`}>{riskLabel(retentionLevel, 'Riesgo de retención')}</strong>
+        </article>
+      </section>
+
       <section className="kpi-grid">
-        <KpiCard icon="winrate" label="Winrate promedio" value={`${model.kpis.winrate}%`} detail="Fact_PartidaJugador" />
+        <KpiCard
+          icon="winrate"
+          label="Tasa de victoria (winrate)"
+          value={`${model.kpis.winrate}%`}
+          detail="Fact_PartidaJugador"
+          signal="Estable"
+        />
         <KpiCard
           icon="abandonment"
           label="Tasa de abandono"
           value={`${model.kpis.abandonment}%`}
           detail="salidas antes de cierre"
+          signal={model.kpis.abandonment > 10 ? 'Riesgo de retención' : 'Estable'}
           level={model.kpis.abandonment > 10 ? 'warning' : 'ok'}
         />
-        <KpiCard icon="crash" label="Crash rate" value={`${model.kpis.crashRate}%`} detail="alerta técnica" level={crashLevel} />
-        <KpiCard icon="fps" label="FPS promedio" value={`${model.kpis.avgFps}`} detail="cliente de playtest" />
+        <KpiCard
+          icon="crash"
+          label="Tasa de crashes"
+          value={`${model.kpis.crashRate}%`}
+          detail="Fact_ErrorTecnico"
+          signal={riskLabel(crashLevel, 'Riesgo técnico')}
+          level={crashLevel}
+        />
+        <KpiCard icon="fps" label="FPS promedio" value={`${model.kpis.avgFps}`} detail="cliente de playtest" signal="Estable" />
         <KpiCard
           icon="satisfaction"
           label="Satisfacción promedio"
           value={`${model.kpis.satisfaction}/10`}
           detail="encuestas ponderadas"
+          signal={satisfactionLevel === 'ok' ? 'Estable' : 'Riesgo de retención'}
           level={satisfactionLevel}
         />
-        <KpiCard icon="return" label="Intención de retorno" value={`${model.kpis.returnIntent}%`} detail="próximo playtest" />
+        <KpiCard
+          icon="return"
+          label="Intención de retorno"
+          value={`${model.kpis.returnIntent}%`}
+          detail="próximo playtest"
+          signal={riskLabel(retentionLevel, 'Riesgo de retención')}
+          level={retentionLevel}
+        />
       </section>
 
-      <Panel title="Balance de héroes" eyebrow="Hero telemetry">
+      <Panel
+        title="Cobertura del modelo dimensional"
+        eyebrow="Data Warehouse"
+        description="Mapa rápido de las facts y dimensiones compartidas que alimentan el tablero. Sirve para explicar de dónde salen las métricas durante la presentación del TPO."
+      >
+        <div className="coverage-grid">
+          {dimensionalCoverage.map((item) => (
+            <article className={`coverage-node ${item.tone}`} key={item.name}>
+              <span>{item.kind}</span>
+              <strong>{item.name}</strong>
+            </article>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel
+        title="Balance de héroes"
+        eyebrow="Telemetría de héroes"
+        description="Detecta personajes demasiado fuertes o débiles combinando tasa de victoria, tasa de selección (pick rate), KDA y daño promedio."
+        badge={riskLabel(balanceLevel, 'Riesgo de balance')}
+        badgeLevel={balanceLevel}
+      >
         <div className="section-grid two">
           <div className="chart-box">
-            <h3>Winrate por héroe</h3>
+            <h3>Tasa de victoria (winrate) por héroe</h3>
             <ResponsiveContainer width="100%" height={290}>
               <BarChart data={model.heroRows} margin={{ top: 12, right: 16, left: 0, bottom: 32 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
                 <XAxis dataKey="hero" stroke="#aab4bd" tick={{ fontSize: 11 }} angle={-28} textAnchor="end" height={62} />
                 <YAxis stroke="#aab4bd" domain={[35, 65]} />
                 <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(215,168,79,.08)' }} />
-                <Bar dataKey="winrate" name="Winrate %" radius={[5, 5, 0, 0]}>
+                <Bar dataKey="winrate" name="Tasa de victoria %" radius={[5, 5, 0, 0]}>
                   {model.heroRows.map((row) => (
                     <Cell key={row.hero} fill={row.winrate > 55 ? chartColors.gold : row.winrate < 45 ? chartColors.red : chartColors.green} />
                   ))}
@@ -129,7 +208,7 @@ export function App() {
             </ResponsiveContainer>
           </div>
           <div className="chart-box">
-            <h3>Pick rate y KDA</h3>
+            <h3>Tasa de selección (pick rate) y KDA promedio</h3>
             <ResponsiveContainer width="100%" height={290}>
               <ComposedChart data={model.heroRows} margin={{ top: 12, right: 16, left: 0, bottom: 32 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
@@ -138,8 +217,8 @@ export function App() {
                 <YAxis yAxisId="right" orientation="right" stroke="#aab4bd" />
                 <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: 'rgba(74,163,182,.08)' }} />
                 <Legend />
-                <Bar yAxisId="left" dataKey="pickRate" name="Pick rate %" fill={chartColors.teal} radius={[5, 5, 0, 0]} />
-                <Line yAxisId="right" type="monotone" dataKey="kda" name="KDA" stroke={chartColors.gold} strokeWidth={3} dot={{ r: 3 }} />
+                <Bar yAxisId="left" dataKey="pickRate" name="Tasa de selección %" fill={chartColors.teal} radius={[5, 5, 0, 0]} />
+                <Line yAxisId="right" type="monotone" dataKey="kda" name="KDA promedio" stroke={chartColors.gold} strokeWidth={3} dot={{ r: 3 }} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
@@ -147,7 +226,11 @@ export function App() {
         <HeroRankingTable rows={model.heroRows} />
       </Panel>
 
-      <Panel title="Rendimiento en partida" eyebrow="Match flow">
+      <Panel
+        title="Rendimiento en partida"
+        eyebrow="Flujo de partida"
+        description="Resume duración, abandono y eventos de gameplay para decidir si el ritmo de partida funciona por mapa, versión y rango de MMR."
+      >
         <div className="mini-strip">
           <div>
             <span>Duración promedio</span>
@@ -184,7 +267,7 @@ export function App() {
                 <YAxis stroke="#aab4bd" />
                 <Tooltip contentStyle={tooltipStyle()} />
                 <Legend />
-                <Line type="monotone" dataKey="winrate" name="Winrate %" stroke={chartColors.gold} strokeWidth={3} />
+                <Line type="monotone" dataKey="winrate" name="Tasa de victoria %" stroke={chartColors.gold} strokeWidth={3} />
                 <Line type="monotone" dataKey="satisfaction" name="Satisfacción" stroke={chartColors.green} strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
@@ -205,12 +288,18 @@ export function App() {
           </div>
         </div>
         <div className="chart-box">
-          <h3>Heatmap de eventos por minuto/fase</h3>
+          <h3>Heatmap de eventos por minuto y fase</h3>
           <EventHeatmap rows={model.heatmap} />
         </div>
       </Panel>
 
-      <Panel title="Rendimiento técnico" eyebrow="Client stability">
+      <Panel
+        title="Rendimiento técnico"
+        eyebrow="Estabilidad del cliente"
+        description="Prioriza bugs, crashes, latencia y FPS para identificar versiones, regiones o mapas que degradan la experiencia del playtest."
+        badge={riskLabel(crashLevel, 'Riesgo técnico')}
+        badgeLevel={crashLevel}
+      >
         <div className="section-grid two">
           <div className="chart-box">
             <h3>Errores técnicos por versión</h3>
@@ -227,7 +316,7 @@ export function App() {
             </ResponsiveContainer>
           </div>
           <div className="chart-box">
-            <h3>Crashes y desconexiones por tipo</h3>
+            <h3>Crashes, desconexiones y errores por tipo</h3>
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={model.errorsByType} layout="vertical" margin={{ left: 72 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.08)" />
@@ -268,7 +357,13 @@ export function App() {
         <CriticalErrorsTable rows={model.criticalErrors} />
       </Panel>
 
-      <Panel title="Experiencia y retención" eyebrow="Survey intelligence">
+      <Panel
+        title="Experiencia y retención del jugador"
+        eyebrow="Encuestas y feedback"
+        description="Analiza satisfacción, frustración e intención de volver para relacionar problemas de balance o rendimiento con retención futura."
+        badge={riskLabel(retentionLevel, 'Riesgo de retención')}
+        badgeLevel={retentionLevel}
+      >
         <div className="section-grid three">
           <div className="experience-card">
             <Activity />
@@ -326,7 +421,12 @@ export function App() {
         </div>
       </Panel>
 
-      <Panel title="Data Mining Preview" eyebrow="Simulated predictive layer" className="mining-panel">
+      <Panel
+        title="Vista predictiva / Data Mining"
+        eyebrow="Capa predictiva simulada"
+        description="Vista conceptual para mostrar cómo el Data Warehouse podría alimentar modelos de predicción de abandono y retorno al próximo playtest."
+        className="mining-panel"
+      >
         <div className="mining-grid">
           {model.mining.map((item) => (
             <article className={`mining-card ${item.value.includes('alto') ? 'danger' : item.value.includes('medio') ? 'warning' : 'ok'}`} key={item.label}>

@@ -16,8 +16,8 @@ export function HeroRankingTable({ rows }: { rows: HeroRow[] }) {
         <thead>
           <tr>
             <th>Héroe</th>
-            <th>Winrate</th>
-            <th>Pick rate</th>
+            <th>Tasa de victoria</th>
+            <th>Tasa de selección</th>
             <th>KDA</th>
             <th>Daño prom.</th>
             <th>Señal</th>

@@ -80,8 +80,7 @@ export const buildDashboardModel = (filters: Filters) => {
     const winrate = played ? (rows.filter((row) => row.won).length / played) * 100 : 0;
     const pickRate = (played / totalPlayers) * 100;
     const avgDamage = average(rows.map((row) => row.damage));
-    const alert =
-      winrate > 55 && pickRate > 13 ? 'Posible desbalance positivo' : winrate < 45 ? 'Posible debilidad' : 'Dentro de rango';
+    const alert = winrate > 55 && pickRate > 13 ? 'Riesgo de balance' : winrate < 45 ? 'Debilidad potencial' : 'Estable';
 
     return {
       hero,
@@ -91,7 +90,7 @@ export const buildDashboardModel = (filters: Filters) => {
       kda: Number(kda.toFixed(2)),
       avgDamage: Math.round(avgDamage),
       alert,
-      alertLevel: alert === 'Dentro de rango' ? 'ok' : winrate < 45 ? 'danger' : 'warning',
+      alertLevel: alert === 'Estable' ? 'ok' : winrate < 45 ? 'danger' : 'warning',
     };
   });
 
